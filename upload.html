@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Resume & Job Description</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Tailwind CSS for utility-first styling and modern aesthetics -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind CSS configuration for custom colors and theme, consistent with other pages
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Custom dark theme colors, consistent with result.html and dashboard.html
+                        'dark-bg-start': '#1a202c', // Deeper charcoal for result.html base
+                        'dark-bg-end': '#2d3748',   // Slightly lighter for result.html base
+                        'dashboard-bg-start': 'rgb(30, 40, 50)', // Dark blue-green for dashboard base
+                        'dashboard-bg-end': 'rgb(50, 60, 70)',   // Dark slate for dashboard base
+                        'dark-card': '#2d3748',     // Card background for result.html
+                        'dashboard-card': 'rgb(60, 75, 90)', // Card background for dashboard.html
+                        'dark-text': '#e2e8f0',     // Off-white for general text
+                        'accent-green': '#48bb78',  // Success/matched keywords (for HR button)
+                        'accent-yellow': '#ecc94b', // Warning/fit probability
+                        'accent-red': '#ef4444',    // Danger
+                        'dark-border': '#4a5568',   // Border color for subtle separation
+                        'light-gray': '#a0aec0',    // Muted grey for secondary text
+                        'accent-blue': '#4299e1',   // A nice blue for primary actions (for Candidate button)
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Segoe UI', 'Arial', 'sans-serif'], // Use Inter for a modern look
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base styles for the body, consistent with dashboard.html */
+        body {
+            font-family: 'Inter', sans-serif; /* Consistent font */
+            background: linear-gradient(135deg, rgb(30, 40, 50), rgb(50, 60, 70)); /* Dashboard background gradient */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e2e8f0; /* Default text color for the body */
+        }
+
+        /* Enhanced card styling, consistent with dashboard.html */
+        .upload-card {
+            max-width: 550px;
+            width: 100%;
+            background: rgb(60, 75, 90); /* Dashboard card background */
+            padding: 2.5rem; /* Increased padding */
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
+            border: 1px solid #4a5568; /* Subtle border */
+        }
+
+        /* Heading styling */
+        .h3-custom {
+            color: #e2e8f0; /* Ensure heading is visible on dark background */
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Form label styling */
+        .form-label {
+            color: #cbd5e0; /* Lighter text for readability */
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Form control (input) styling */
+        .form-control {
+            background-color: rgb(45, 55, 72); /* Darker input background */
+            border: 1px solid #4a5568; /* Darker border */
+            color: #e2e8f0; /* Input text color */
+            padding: 0.75rem 1rem; /* Adjust padding */
+            border-radius: 0.5rem; /* Rounded input corners */
+        }
+        .form-control::placeholder {
+            color: #a0aec0; /* Placeholder text color */
+        }
+        .form-control:focus {
+            background-color: rgb(45, 55, 72); /* Keep dark on focus */
+            border-color: #63b3ed; /* Accent blue border on focus */
+            box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25); /* Subtle blue shadow on focus */
+            color: #e2e8f0;
+        }
+
+        /* Button styling, consistent with other pages */
+        .btn-custom-primary {
+            background-color: #4299e1; /* Accent blue */
+            border-color: #4299e1;
+            color: white;
+            font-weight: 600;
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 1.15rem;
+        }
+        .btn-custom-primary:hover {
+            background-color: #3182ce; /* Darker blue on hover */
+            border-color: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="upload-card">
+        <h3 class="text-center mb-4 h3-custom">📤 Upload Your Documents</h3>
+
+        {# Form action correctly points to the single resume processing route #}
+        <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+            <div class="mb-4">
+                <label for="resume" class="form-label">Resume (PDF/DOCX)</label>
+                <input class="form-control" type="file" name="resume" id="resume" required>
+            </div>
+
+            <div class="mb-5">
+                <label for="jobdesc" class="form-label">Job Description (PDF/DOCX)</label>
+                <input class="form-control" type="file" name="job_description" id="jobdesc" required>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-custom-primary btn-lg">
+                    🚀 Upload and Analyze
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

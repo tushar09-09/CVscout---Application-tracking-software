@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ATS Analysis Result</title>
+
+    <!-- Bootstrap 5 for core components (forms, grid) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS for utility-first styling and modern aesthetics -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind CSS configuration for custom colors and theme
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Custom dark theme colors
+                        'dark-bg': '#1a202c',       // Deeper charcoal
+                        'dark-card': '#2d3748',     // Slightly lighter than bg for cards
+                        'dark-text': '#e2e8f0',     // Off-white for general text
+                        'accent-green': '#48bb78',  // Success/matched keywords
+                        'accent-yellow': '#ecc94b', // Warning/fit probability
+                        'accent-red': '#ef4444',    // Danger/missing keywords
+                        'dark-border': '#4a5568',   // Border color for subtle separation
+                        'light-gray': '#a0aec0',    // Muted grey for secondary text
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Segoe UI', 'Arial', 'sans-serif'], // Use Inter for a modern look
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* CRITICAL FIX: Global box-sizing for consistent layout calculations */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        /* CRITICAL FIX: Explicitly set html and body to 100% viewport height and prevent overflow */
+        html, body {
+            height: 100vh; /* Ensure 100% of viewport height */
+            margin: 0; /* Remove default margins */
+            padding: 0; /* Remove default padding */
+            overflow: hidden; /* Prevent scrolling on the root elements */
+        }
+
+        /* Base styles that integrate Bootstrap and Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a202c, #2d3748); /* Darker gradient background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem; /* Adjusted padding for better calculation with max-height */
+            color: #e2e8f0; /* Default text color for the body */
+        }
+
+        /* Override Bootstrap card styles with Tailwind-like dark theme */
+        .result-card {
+            background: #2d3748; /* Dark card background */
+            padding: 2.5rem; /* Increased padding */
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
+            max-width: 900px;
+            width: 100%;
+            border: 1px solid #4a5568; /* Subtle border */
+            /* Constrain card height and enable internal scrolling if content overflows */
+            max-height: calc(100vh - 3rem); /* 100vh minus 1.5rem top and 1.5rem bottom body padding */
+            overflow-y: auto; /* Enable vertical scrolling only within the card */
+            flex-shrink: 0; /* Prevents the card from shrinking unexpectedly in a flex container */
+        }
+
+        .h3-custom {
+            color: #e2e8f0; /* Ensure heading is visible on dark background */
+            font-weight: 700; /* Bold heading */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* Subtle text shadow */
+        }
+
+        /* Progress bar styling */
+        .progress {
+            height: 28px; /* Slightly taller progress bar */
+            background-color: #4a5568; /* Darker track for progress bar */
+            border-radius: 0.75rem; /* Rounded corners for progress track */
+            overflow: hidden; /* Ensure content stays within borders */
+        }
+
+        .progress-bar {
+            font-weight: bold;
+            border-radius: 0.75rem; /* Rounded corners for the filled bar */
+            transition: width 0.6s ease-in-out; /* Smooth transition for width change */
+            display: flex; /* Flexbox for centering text */
+            align-items: center; /* Center text vertically */
+            justify-content: center; /* Center text horizontally */
+        }
+
+        /* Keyword boxes */
+        .keyword-box {
+            background: #232d3b; /* Even darker background for keyword boxes */
+            padding: 1.25rem;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            color: #cbd5e0; /* Lighter text for keywords */
+            border: 1px solid #4a5568; /* Subtle border */
+            line-height: 1.6; /* Better readability */
+        }
+        .keyword-box:empty:before {
+            content: "N/A"; /* Display N/A if no keywords */
+            color: #9a9a9a;
+            font-style: italic;
+        }
+
+        /* Button styling */
+        .btn-custom-primary {
+            background-color: #4299e1; /* A nice blue for primary actions */
+            border-color: #4299e1;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem; /* More rounded buttons */
+            transition: all 0.3s ease;
+        }
+        .btn-custom-primary:hover {
+            background-color: #3182ce; /* Darker blue on hover */
+            border-color: #3182ce;
+            transform: translateY(-2px); /* Subtle lift effect */
+            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3);
+        }
+
+        .btn-custom-outline {
+            border: 2px solid #63b3ed; /* Lighter blue border for outline */
+            color: #63b3ed;
+            background-color: transparent;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .btn-custom-outline:hover {
+            background-color: #63b3ed;
+            color: #1a202c; /* Dark text on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(99, 179, 237, 0.3);
+        }
+
+        /* Chart adjustments for dark theme */
+        canvas#fitChart {
+            background-color: #232d3b; /* Dark background for chart */
+            border-radius: 1rem; /* Rounded corners for chart area */
+            padding: 1rem;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2); /* Inner shadow */
+        }
+    </style>
+</head>
+<body>
+
+<div class="result-card">
+    <h3 class="mb-4 text-center h3-custom">🔍 ATS Analysis Result</h3>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <p class="mb-2 text-dark-text">
+                <strong class="text-light-gray">Match Score:</strong>
+                <span class="text-accent-green fs-4">{{ score }}%</span>
+            </p>
+            <div class="progress mb-4" style="height: 28px;">
+                <div class="progress-bar bg-accent-green" role="progressbar"
+                    style="width: {{ score }}%;" aria-valuenow="{{ score }}"
+                    aria-valuemin="0" aria-valuemax="100">
+                    {{ score }}%
+                </div>
+            </div>
+
+            <p class="mb-2 text-dark-text">
+                <strong class="text-light-gray">ML Fit Probability:</strong>
+                <span class="text-accent-yellow fs-4">{{ fit_prob }}%</span>
+            </p>
+            <!-- CRITICAL FIX: Wrapped canvas in a div and removed fixed width/height -->
+            <div style="width: 100%; max-width: 300px; margin: 0 auto;" class="h-64">
+                <canvas id="fitChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h5 class="mt-2 text-dark-text">✅ Matched Keywords:</h5>
+            <div class="keyword-box mb-4">{{ matched_keywords|join(', ') }}</div>
+
+            <h5 class="mt-4 text-dark-text">❌ Missing Keywords:</h5>
+            <div class="keyword-box">{{ missing_keywords|join(', ') }}</div>
+        </div>
+    </div>
+
+    <div class="text-center mt-6">
+        <a href="{{ url_for('download_pdf') }}" class="btn btn-custom-primary">
+            ⬇️ Download PDF Report
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-custom-outline">
+            🏠 Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Chart.js configuration
+    const fitProb = parseFloat("{{ fit_prob }}");
+    const ctx = document.getElementById('fitChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Fit', 'Gap'],
+            datasets: [{
+                data: [fitProb, 100 - fitProb],
+                backgroundColor: [
+                    '#ecc94b', // Accent yellow for 'Fit'
+                    '#4a5568'  // Darker gray for 'Gap'
+                ],
+                borderColor: '#2d3748', // Border color matching card background
+                borderWidth: 2
+            }]
+        },
+        options: {
+            cutout: '70%',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        color: '#e2e8f0', // Legend text color
+                        font: {
+                            size: 14,
+                            family: 'Inter',
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += context.parsed + '%';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

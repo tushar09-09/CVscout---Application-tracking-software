@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Career Scout – AI-Powered Hiring</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+  font-family: 'Segoe UI', sans-serif;
+  background: url('https://media.istockphoto.com/id/1434278254/vector/blue-and-pink-light-panoramic-defocused-blurred-motion-gradient-abstract-background-vector.jpg?s=612x612&w=0&k=20&c=_KXodNw25trgE0xDe0zFnzNiofFgV50aajKpcI9x_8I=')
+    center center / cover no-repeat fixed;
+  color: #e6b046; /* Optional: sets default text color to white for contrast */
+}
+
+
+    .hero {
+      background: url("https://media.istockphoto.com/id/1434278254/vector/blue-and-pink-light-panoramic-defocused-blurred-motion-gradient-abstract-background-vector.jpg?s=612x612&w=0&k=20&c=_KXodNw25trgE0xDe0zFnzNiofFgV50aajKpcI9x_8I=") center center / cover no-repeat;
+      color: #fff;
+      padding: 100px 0;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+    }
+
+    .feature-ico {
+      font-size: 2rem;
+      margin-bottom: .5rem;
+      color: #0d6efd;
+    }
+
+    .logo-wall img {
+      filter: grayscale(100%);
+      opacity: .6;
+      margin: 0 10px;
+      height: 40px;
+      transition: filter .3s, opacity .3s;
+    }
+
+    .logo-wall img:hover {
+      filter: none;
+      opacity: 1;
+    }
+
+    .section-title {
+      font-weight: 700;
+    }
+
+    .nav-admin-btn {
+      font-weight: 600;
+      padding-inline: 1rem;
+    }
+
+    .feature-img {
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    footer {
+      background: url("/static/dashboardimage.jpg") center center / cover no-repeat;
+      background-size: cover;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">Career Scout</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="nav" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto align-items-center">
+        {# Display username if logged in #}
+        {% if username %}
+          <li class="nav-item">
+            <a class="nav-link">Hello, <strong>{{ username }}</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+          </li>
+          {# Admin panel link only for 'admin2' #}
+          {% if username == 'admin2' %}
+            <li class="nav-item ms-lg-3">
+              <a href="{{ url_for('admin_panel') }}" class="btn btn-sm btn-outline-danger nav-admin-btn">Admin Panel</a>
+            </li>
+          {% endif %}
+          <li class="nav-item ms-lg-3">
+            <a class="nav-link btn btn-outline-danger" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        {% else %}
+          {# Login/Signup links if not logged in #}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+          <li class="nav-item"><a class="btn btn-primary ms-lg-3" href="{{ url_for('signup') }}">Sign Up</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero text-center text-white">
+  <div class="container">
+    <h1 class="fw-bold">Smarter Hiring Starts Here</h1>
+    <p class="lead">AI-powered resume scanning and job matching in seconds. Built for recruiters & job seekers.</p>
+    {# Call to action based on login status #}
+    {% if username %}
+      <a href="{{ url_for('dashboard') }}" class="btn btn-success btn-lg">Go to Dashboard</a>
+    {% else %}
+      <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg me-2">Login</a>
+      <a href="{{ url_for('signup') }}" class="btn btn-outline-light btn-lg">Create Account</a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- LOGO WALL -->
+<section class="py-4 bg-white text-center">
+  <div class="container">
+    <small class="text-muted text-uppercase">Trusted by hiring teams worldwide</small>
+    <div class="d-flex justify-content-center flex-wrap logo-wall mt-3">
+      <img src="https://dummyimage.com/120x40/000/fff&text=TechCorp" alt="TechCorp Logo" />
+      <img src="https://dummyimage.com/120x40/000/fff&text=HRPro" alt="HRPro Logo" />
+      <img src="https://dummyimage.com/120x40/000/fff&text=Innova" alt="Innova Logo" />
+      <img src="https://dummyimage.com/120x40/000/fff&text=GlobalX" alt="GlobalX Logo" />
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE IMAGE -->
+<section class="py-5 bg-light">
+  <div class="container text-center">
+    <img src="/static/20944142.jpg" class="img-fluid feature-img mb-4" alt="ATS Dashboard Illustration" />
+    <h2 class="section-title mb-4">Why ATS Analyzer?</h2>
+    <p class="lead">Our AI simplifies recruitment by scanning, scoring, and recommending the best-fit candidates for any role.</p>
+  </div>
+</section>
+
+<!-- AI FEATURES -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 justify-content-center text-center">
+      <div class="col-md-3">
+        <div class="bg-white p-4 rounded shadow-sm h-100">
+          <div class="feature-ico">🤖</div>
+          <h5>Resume Scanning</h5>
+          <p>AI scans resumes with up to 98% accuracy.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="bg-white p-4 rounded shadow-sm h-100">
+          <div class="feature-ico">📊</div>
+          <h5>Smart JD Matching</h5>
+          <p>Instant scoring based on job descriptions.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="bg-white p-4 rounded shadow-sm h-100">
+          <div class="feature-ico">📄</div>
+          <h5>PDF Report</h5>
+          <p>Download ATS match reports instantly.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="bg-white p-4 rounded shadow-sm h-100">
+          <div class="feature-ico">💡</div>
+          <h5>Keyword Insights</h5>
+          <p>Improve resumes with missing keyword suggestions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-primary text-white text-center">
+  <div class="container">
+    <h2 class="mb-3">Ready to upgrade your hiring process?</h2>
+    <a href="{{ url_for('signup') }}" class="btn btn-light btn-lg">Create Free Account</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-4 text-center small">
+  <div class="container">
+    &copy; 2025 ATS Analyzer | Built by Tushar Parit
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

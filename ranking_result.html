@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Candidate Rankings</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS for utility-first styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind CSS configuration for custom colors and theme, consistent with other pages
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Custom dark theme colors, consistent with other pages
+                        'dark-bg-start': '#1a202c',
+                        'dark-bg-end': '#2d3748',
+                        'dashboard-bg-start': 'rgb(30, 40, 50)',
+                        'dashboard-bg-end': 'rgb(50, 60, 70)',
+                        'dark-card': '#2d3748',
+                        'dashboard-card': 'rgb(60, 75, 90)',
+                        'dark-text': '#e2e8f0',
+                        'accent-green': '#48bb78',
+                        'accent-yellow': '#ecc94b',
+                        'accent-red': '#ef4444',
+                        'dark-border': '#4a5568',
+                        'light-gray': '#a0aec0',
+                        'accent-blue': '#4299e1',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Segoe UI', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base styles consistent with other dark-themed pages */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, rgb(30, 40, 50), rgb(50, 60, 70));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            color: #e2e8f0;
+            overflow: hidden; /* Prevent body scrolling */
+        }
+
+        /* Card styling for the ranking results */
+        .ranking-card {
+            background: rgb(60, 75, 90);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            border: 1px solid #4a5568;
+            max-height: calc(100vh - 3rem); /* Ensure card fits within viewport */
+            overflow-y: auto; /* Enable internal scrolling */
+            flex-shrink: 0;
+        }
+
+        .h3-custom {
+            color: #e2e8f0;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Table styling for dark theme */
+        .table {
+            --bs-table-bg: #3c4b5a; /* Table background matching card */
+            --bs-table-color: #e2e8f0; /* Text color */
+            --bs-table-striped-bg: #4a5568; /* Striped row background */
+            --bs-table-hover-bg: #5a677d; /* Hover background */
+            border-color: #4a5568; /* Table border color */
+        }
+
+        .table thead th {
+            border-bottom-color: #4a5568; /* Header border color */
+            color: #a0aec0; /* Header text color */
+            font-weight: 600;
+        }
+
+        .table tbody td {
+            border-top-color: #4a5568; /* Cell top border color */
+        }
+
+        .btn-custom-outline {
+            border: 2px solid #63b3ed;
+            color: #63b3ed;
+            background-color: transparent;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .btn-custom-outline:hover {
+            background-color: #63b3ed;
+            color: #1a202c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(99, 179, 237, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="ranking-card">
+    <h3 class="text-center h3-custom">🏆 Candidate Rankings</h3>
+
+    {% if results %}
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Filename</th>
+                <th>Match Score (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in results %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ r.filename }}</td>
+                <td><strong class="text-accent-green">{{ r.score }}</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-center text-light-gray mt-4">No candidates ranked. Please upload resumes and a job description.</p>
+    {% endif %}
+
+    <div class="text-center mt-5">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-custom-outline">🏠 Back to Dashboard</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

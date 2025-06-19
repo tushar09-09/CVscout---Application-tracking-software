@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload for Ranking</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Tailwind CSS for utility-first styling and modern aesthetics -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind CSS configuration for custom colors and theme, consistent with other pages
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Custom dark theme colors, consistent with other pages
+                        'dark-bg-start': '#1a202c', // For result.html
+                        'dark-bg-end': '#2d3748',
+                        'dashboard-bg-start': 'rgb(30, 40, 50)', // For dashboard & upload pages
+                        'dashboard-bg-end': 'rgb(50, 60, 70)',   // For dashboard & upload pages
+                        'dark-card': '#2d3748',
+                        'dashboard-card': 'rgb(60, 75, 90)',
+                        'dark-text': '#e2e8f0',
+                        'accent-green': '#48bb78', // Used for HR button/ranking primary
+                        'accent-yellow': '#ecc94b',
+                        'accent-red': '#ef4444',
+                        'dark-border': '#4a5568',
+                        'light-gray': '#a0aec0',
+                        'accent-blue': '#4299e1', // Used for Candidate button/single upload primary
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Segoe UI', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base styles for the body, consistent with dashboard.html and upload.html */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, rgb(30, 40, 50), rgb(50, 60, 70));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e2e8f0;
+        }
+
+        /* Card styling, consistent with dashboard.html and upload.html */
+        .ranking-upload-card {
+            max-width: 600px; /* Slightly wider card for multiple files */
+            width: 100%;
+            background: rgb(60, 75, 90);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid #4a5568;
+        }
+
+        /* Heading styling */
+        .h3-custom {
+            color: #e2e8f0;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Form label styling */
+        .form-label {
+            color: #cbd5e0;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Form control (input) styling */
+        .form-control {
+            background-color: rgb(45, 55, 72);
+            border: 1px solid #4a5568;
+            color: #e2e8f0;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+        }
+        .form-control::placeholder {
+            color: #a0aec0;
+        }
+        .form-control:focus {
+            background-color: rgb(45, 55, 72);
+            border-color: #63b3ed;
+            box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25);
+            color: #e2e8f0;
+        }
+
+        /* Button styling, consistent with other pages */
+        .btn-custom-primary {
+            background-color: #48bb78; /* Using accent green for 'Rank Candidates' */
+            border-color: #48bb78;
+            color: white;
+            font-weight: 600;
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 1.15rem;
+        }
+        .btn-custom-primary:hover {
+            background-color: #38a169; /* Darker green on hover */
+            border-color: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ranking-upload-card">
+        <h3 class="text-center mb-4 h3-custom">📊 Upload JD & Resumes for Ranking</h3>
+        <p class="text-center text-light-gray mb-5">Upload one Job Description and multiple resumes to rank candidates based on fit.</p>
+
+        {# CRITICAL FIX: Added action attribute to correctly target the /rank_process POST route #}
+        <form action="{{ url_for('rank_process') }}" method="POST" enctype="multipart/form-data">
+            <div class="mb-4">
+                <label for="jd_file" class="form-label">Job Description File (PDF/DOCX)</label>
+                <input type="file" name="jd" id="jd_file" class="form-control" required>
+            </div>
+            <div class="mb-5">
+                <label for="resume_files" class="form-label">Resume Files (Select Multiple PDF/DOCX)</label>
+                <input type="file" name="resumes" id="resume_files" class="form-control" multiple required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-custom-primary btn-lg">
+                    🚀 Rank Candidates
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
