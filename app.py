@@ -35,15 +35,60 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False # Disable modification trac
 db = SQLAlchemy(app)
 
 # ── ML Classifier for Fit Probability (used for single resume analysis)
+from sklearn.utils import shuffle
+
 sample_data = [
-    ("python pandas numpy machine learning", 1),
-    ("excel powerpoint word communication", 0),
-    ("data analysis sql matplotlib seaborn", 1),
-    ("data analysis sql matplotlib seaborn", 1),
-    ("team work hard work adaptability", 0),
-    ("deep learning pytorch keras tensorflow", 1),
-    ("leadership presentation decision making", 0),
-]
+    # Data Analyst (fit)
+    ("python pandas numpy matplotlib seaborn sql tableau powerbi", 1),
+    ("data cleaning data visualization pandas matplotlib sql", 1),
+    ("machine learning regression classification sklearn pandas", 1),
+    ("excel pivot table power query data analysis", 1),
+    ("time series forecasting arima prophet data analytics", 1),
+    ("data mining pattern recognition big data sql", 1),
+    ("etl process data wrangling python sql", 1),
+    ("statistics hypothesis testing data science pandas", 1),
+    ("report automation excel macros data dashboards", 1),
+    ("ad hoc reporting data extraction sql pandas", 1),
+] * 5 + [
+    # Data Analyst (non-fit)
+    ("sales target cold calling communication ms word", 0),
+    ("project management agile scrum leadership", 0),
+    ("photoshop illustrator graphic design creative", 0),
+    ("customer engagement crm feedback handling", 0),
+    ("social media marketing campaign ads", 0),
+    ("retail sales cashier billing customer service", 0),
+    ("inventory stock management warehouse", 0),
+    ("receptionist data entry ms office", 0),
+    ("quality check inspection maintenance", 0),
+    ("client servicing insurance renewal", 0),
+] * 5 + [
+    # Web Developer (fit)
+    ("html css javascript react node express mongodb", 1),
+    ("responsive web design bootstrap javascript figma", 1),
+    ("django flask python sql api development", 1),
+    ("frontend development html css reactjs typescript", 1),
+    ("backend development nodejs express mongodb", 1),
+    ("web deployment nginx docker github actions", 1),
+    ("authentication authorization oauth jwt api", 1),
+    ("debugging browser console network html css js", 1),
+    ("version control git github web projects", 1),
+    ("rest api integration axios fetch javascript", 1),
+] * 5 + [
+    # Web Developer (non-fit)
+    ("financial analysis stock market trading reports", 0),
+    ("supply chain logistics warehouse operations", 0),
+    ("customer support chat support crm phone", 0),
+    ("business analysis stakeholder requirement document", 0),
+    ("legal documentation contracts compliance", 0),
+    ("banking transaction processing core finance", 0),
+    ("medical billing hospital administration records", 0),
+    ("event planning coordination guest management", 0),
+    ("procurement vendor negotiation inventory", 0),
+    ("training hr recruitment onboarding", 0),
+] * 5
+
+sample_data = shuffle(sample_data)
+
 vectorizer = TfidfVectorizer()
 X_train = vectorizer.fit_transform([text for text, label in sample_data])
 y_train = [label for text, label in sample_data]
