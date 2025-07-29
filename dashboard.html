@@ -7,28 +7,26 @@
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Tailwind CSS for utility-first styling and modern aesthetics -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Tailwind CSS configuration for custom colors and theme
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // Custom dark theme colors for Dashboard (different from result.html)
-                        'dashboard-bg-start': '#1e2832', // Dark blue-green
-                        'dashboard-bg-end': '#323c46',   // Dark slate
-                        'dashboard-card': '#3c4b5a',     // Darker blue-gray for cards
-                        'dark-text': '#e2e8f0',          // Off-white for general text
-                        'accent-green': '#48bb78',       // Success/matched keywords (for HR button)
-                        'accent-yellow': '#ecc94b',      // Warning/fit probability
-                        'accent-red': '#ef4444',         // Danger
-                        'dark-border': '#4a5568',        // Border color for subtle separation
-                        'light-gray': '#a0aec0',         // Muted grey for secondary text
-                        'accent-blue': '#4299e1',        // A nice blue for primary actions (for Candidate button)
+                        'dashboard-bg-start': '#1e2832',
+                        'dashboard-bg-end': '#323c46',
+                        'dashboard-card': '#3c4b5a',
+                        'dark-text': '#e2e8f0',
+                        'accent-green': '#48bb78',
+                        'accent-yellow': '#ecc94b',
+                        'accent-red': '#ef4444',
+                        'dark-border': '#4a5568',
+                        'light-gray': '#a0aec0',
+                        'accent-blue': '#4299e1',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'Segoe UI', 'Arial', 'sans-serif'], // Use Inter for a modern look
+                        sans: ['Inter', 'Segoe UI', 'Arial', 'sans-serif'],
                     }
                 }
             }
@@ -36,59 +34,54 @@
     </script>
 
     <style>
-        /* Base styles consistent with result.html for a unified look */
         body {
-            font-family: 'Inter', sans-serif; /* Consistent font */
-            /* Updated: New dark RGB gradient for the body background */
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, rgb(30, 40, 50), rgb(50, 60, 70));
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #e2e8f0; /* Default text color for the body */
+            color: #e2e8f0;
+            flex-direction: column;
         }
 
-        /* Enhanced card styling */
         .card-enhanced {
-            /* Updated: New dark RGB background for the card */
             background: rgb(60, 75, 90);
-            padding: 2.5rem; /* Increased padding */
-            border-radius: 1.5rem; /* More rounded corners */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Stronger shadow for depth */
-            border: 1px solid #4a5568; /* Subtle border (can keep this or adjust) */
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid #4a5568;
         }
 
-        /* Heading and paragraph text color */
         .h3-custom {
-            color: #e2e8f0; /* Ensure heading is visible on dark background */
+            color: #e2e8f0;
             font-weight: 700;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
         .p-custom {
-            color: #cbd5e0; /* Lighter text for readability on dark background */
+            color: #cbd5e0;
         }
 
-        /* Button styling, consistent with result.html */
         .btn-custom-primary {
-            background-color: #4299e1; /* Accent blue for primary actions */
+            background-color: #4299e1;
             border-color: #4299e1;
             color: white;
             font-weight: 600;
-            padding: 0.85rem 1.5rem; /* Slightly more vertical padding for larger buttons */
-            border-radius: 0.75rem; /* More rounded buttons */
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.75rem;
             transition: all 0.3s ease;
-            font-size: 1.15rem; /* Slightly larger font for prominence */
+            font-size: 1.15rem;
         }
         .btn-custom-primary:hover {
-            background-color: #3182ce; /* Darker blue on hover */
+            background-color: #3182ce;
             border-color: #3182ce;
-            transform: translateY(-2px); /* Subtle lift effect */
+            transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3);
         }
 
         .btn-custom-success {
-            background-color: #48bb78; /* Accent green for success/HR button */
+            background-color: #48bb78;
             border-color: #48bb78;
             color: white;
             font-weight: 600;
@@ -98,10 +91,27 @@
             font-size: 1.15rem;
         }
         .btn-custom-success:hover {
-            background-color: #38a169; /* Darker green on hover */
+            background-color: #38a169;
             border-color: #38a169;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-outline-custom {
+            border: 2px solid #63b3ed;
+            color: #63b3ed;
+            background-color: transparent;
+            font-weight: 600;
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        .btn-outline-custom:hover {
+            background-color: #63b3ed;
+            color: #1a202c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(99, 179, 237, 0.3);
         }
     </style>
 </head>
@@ -118,7 +128,7 @@
                         Please select how you’d like to use the ATS today.
                     </p>
 
-                    <form action="/select_role" method="POST" class="d-grid gap-4 mt-4"> {# Increased gap #}
+                    <form action="/select_role" method="POST" class="d-grid gap-4 mt-4">
                         <button type="submit" name="role" value="candidate"
                                 class="btn btn-custom-primary w-100">
                             🎓 I’m a Candidate
@@ -130,9 +140,15 @@
                         </button>
                     </form>
                 </div>
-
             </div>
         </div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div class="mt-4 text-center">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-custom">
+            🔁 Back to Main Page
+        </a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
